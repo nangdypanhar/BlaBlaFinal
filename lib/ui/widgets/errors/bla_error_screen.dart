@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../theme/theme.dart';
 
 const String blablaWifiImagePath = 'assets/images/blabla_wifi.png';
@@ -11,9 +10,9 @@ class BlaError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.only(left: BlaSpacings.m, right: BlaSpacings.m, top: BlaSpacings.s),
+    return Padding(
+      padding: const EdgeInsets.only(
+          left: BlaSpacings.m, right: BlaSpacings.m, top: BlaSpacings.s),
       child: Center(
         child: Column(
           children: [
@@ -23,11 +22,12 @@ class BlaError extends StatelessWidget {
             ),
             Text(
               message,
-              style: BlaTextStyles.heading.copyWith(color: BlaColors.textNormal),
+              style:
+                  BlaTextStyles.heading.copyWith(color: BlaColors.textNormal),
             ),
           ],
         ),
       ),
-    ));
+    );
   }
 }

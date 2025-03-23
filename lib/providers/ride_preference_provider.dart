@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:week_3_blabla_project/model/ride/ride_pref.dart';
+import 'package:week_3_blabla_project/providers/async_value.dart';
 import 'package:week_3_blabla_project/repository/ride_preferences_repository.dart';
 
 class RidesPreferencesProvider extends ChangeNotifier {
   RidePreference? _currentPreference;
-  List<RidePreference> pastPreferences = [];
+  late AsyncValue<List<RidePreference>> pastPreferences;
+
   final RidePreferencesRepository repository;
 
-  RidesPreferencesProvider({required this.repository});
+  RidesPreferencesProvider({required this.repository}) {
+    fetchPastPreferences();
+  }
 
   RidePreference? get currentPreference => _currentPreference;
 
@@ -18,16 +22,29 @@ class RidesPreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addPreference(RidePreference preference) {
-    repository.addPreference(preference);
+  void addPreference(RidePreference preference) async {
+    await repository.addPreference(preference);
+    fetchPastPreferences();
     notifyListeners();
   }
 
-  void getPastPreferences() {
-    pastPreferences = repository.getPastPreferences();
+  void fetchPastPreferences() async {
+    pastPreferences = AsyncValue.loading();
+
+    try {
+      List<RidePreference> ridePref = await repository.getPastPreferences();
+      pastPreferences = AsyncValue.success(ridePref);
+    } catch (error) {
+      pastPreferences = AsyncValue.error(error);
+    }
     notifyListeners();
   }
 
-  List<RidePreference> get preferencesHistory =>
-      pastPreferences.reversed.toList();
+  // void getPastPreferences()  {
+  //   pastPreference =  repository.getPastPreferences() as List<RidePreference>;
+  //   notifyListeners();
+  // }
+
+  // List<RidePreference> get preferencesHistory =>
+  //     pastPreferences.reversed.toList();
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:week_3_blabla_project/providers/async_value.dart';
 import 'package:week_3_blabla_project/providers/ride_preference_provider.dart';
+import 'package:week_3_blabla_project/ui/widgets/errors/bla_error_screen.dart';
 import '../../../model/ride/ride_pref.dart';
 import '../../theme/theme.dart';
 import '../../../utils/animations_util.dart';
@@ -18,8 +20,8 @@ const String blablaHomeImagePath = 'assets/images/blabla_home.png';
 class RidePrefScreen extends StatelessWidget {
   const RidePrefScreen({super.key});
 
-   onRidePrefSelected(BuildContext context,
-      RidesPreferencesProvider provider, RidePreference newPreference) async {
+  onRidePrefSelected(BuildContext context, RidesPreferencesProvider provider,
+      RidePreference newPreference) async {
     // 1 - Update the current preference
     provider.setCurrentPreference(newPreference);
 
@@ -36,7 +38,6 @@ class RidePrefScreen extends StatelessWidget {
     return Consumer<RidesPreferencesProvider>(
       builder: (context, provider, child) {
         RidePreference? currentRidePreference = provider.currentPreference;
-        List<RidePreference> pastPreferences = provider.pastPreferences;
         return Stack(
           children: [
             // 1 - Background  Image
@@ -70,19 +71,7 @@ class RidePrefScreen extends StatelessWidget {
                       SizedBox(height: BlaSpacings.m),
 
                       // 2.2 Optionally display a list of past preferences
-                      SizedBox(
-                        height: 200, // Set a fixed height
-                        child: ListView.builder(
-                          shrinkWrap: true, // Fix ListView height issue
-                          physics: AlwaysScrollableScrollPhysics(),
-                          itemCount: pastPreferences.length,
-                          itemBuilder: (ctx, index) => RidePrefHistoryTile(
-                            ridePref: pastPreferences[index],
-                            onPressed: () => onRidePrefSelected(
-                                context, provider, pastPreferences[index]),
-                          ),
-                        ),
-                      ),
+                      pastPreferenceWidget(provider, context)
                     ],
                   ),
                 ),
@@ -92,6 +81,33 @@ class RidePrefScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  Widget pastPreferenceWidget(
+      RidesPreferencesProvider provider, BuildContext context) {
+    final rideValue = provider.pastPreferences;
+    switch (rideValue.state) {
+      case AsyncValueState.loading:
+        return BlaError(message: "Loading...");
+      case AsyncValueState.error:
+        return BlaError(message: 'No Connection. Try again later');
+
+      case AsyncValueState.success:
+        final pastPreferences = rideValue.data ?? [];
+        return SizedBox(
+          height: 200,
+          child: ListView.builder(
+            shrinkWrap: true,
+            physics: AlwaysScrollableScrollPhysics(),
+            itemCount: pastPreferences.length,
+            itemBuilder: (ctx, index) => RidePrefHistoryTile(
+              ridePref: pastPreferences[index],
+              onPressed: () =>
+                  onRidePrefSelected(context, provider, pastPreferences[index]),
+            ),
+          ),
+        );
+    }
   }
 }
 
