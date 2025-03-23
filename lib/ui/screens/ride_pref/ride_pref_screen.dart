@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:week_3_blabla_project/providers/async_value.dart';
-import 'package:week_3_blabla_project/providers/ride_preference_provider.dart';
+import 'package:week_3_blabla_project/ui/providers/async_value.dart';
+import 'package:week_3_blabla_project/ui/providers/ride_preference_provider.dart';
 import 'package:week_3_blabla_project/ui/widgets/errors/bla_error_screen.dart';
 import '../../../model/ride/ride_pref.dart';
 import '../../theme/theme.dart';
