@@ -31,6 +31,7 @@ class RidePrefScreen extends StatelessWidget {
     );
 
     // 3 - After wait  - Update the state   -- TODO MAKE IT WITH STATE MANAGEMENT
+    provider.addPastPreferences(newPreference);
   }
 
   @override

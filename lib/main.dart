@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:week_3_blabla_project/data/repository/local/local_ride_preferences_repository.dart';
 import 'package:week_3_blabla_project/ui/providers/ride_preference_provider.dart';
 import 'package:week_3_blabla_project/data/repository/mock/mock_locations_repository.dart';
-import 'package:week_3_blabla_project/data/repository/mock/mock_ride_preferences_repository.dart';
 import 'package:week_3_blabla_project/data/repository/mock/mock_rides_repository.dart';
 import 'package:week_3_blabla_project/service/locations_service.dart';
 import 'package:week_3_blabla_project/service/rides_service.dart';
@@ -12,14 +12,14 @@ import 'ui/theme/theme.dart';
 void main() {
   RidesService.initialize(MockRidesRepository());
   LocationsService.initialize(MockLocationsRepository());
-  MockRidePreferencesRepository mockRepo = MockRidePreferencesRepository();
+  LocalRidePreferencesRepository localRepo = LocalRidePreferencesRepository();
 
   // 2 - Run the UI
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => RidesPreferencesProvider(repository: mockRepo),
+          create: (context) => RidesPreferencesProvider(repository: localRepo),
         ),
       ],
       child: const MyApp(),

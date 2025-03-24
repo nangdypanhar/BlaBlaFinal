@@ -28,6 +28,12 @@ class RidesPreferencesProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addPastPreferences(RidePreference preference) async {
+    await repository.addPastPreferences(preference);
+    fetchPastPreferences();
+    notifyListeners();
+  }
+
   void fetchPastPreferences() async {
     pastPreferences = AsyncValue.loading();
 
